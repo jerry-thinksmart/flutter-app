@@ -15,10 +15,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // CONCEPT 9 – FILTER LOGIC: filter categories by search text
   List<CategoryModel> get _filtered {
-    if (_searchQuery.isEmpty) return appCategories;
-    return appCategories
-        .where((c) => c.name.toLowerCase().contains(_searchQuery.toLowerCase()))
-        .toList();
+    if (_searchQuery.isEmpty) {
+      return appCategories;
+    } else {
+      return appCategories
+          .where(
+            (c) => c.name.toLowerCase().contains(_searchQuery.toLowerCase()),
+          )
+          .toList();
+    }
   }
 
   @override
@@ -42,22 +47,11 @@ class _HomeScreenState extends State<HomeScreen> {
           // ── Search bar (also a filter) ───────────────────────
           Container(
             color: const Color(0xFF6C63FF),
+            width: double.infinity,
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: TextField(
+            child: SearchBar(
               onChanged: (v) => setState(() => _searchQuery = v),
-              style: const TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                hintText: 'Search categories…',
-                hintStyle: TextStyle(color: Colors.white.withOpacity(0.7)),
-                prefixIcon: const Icon(Icons.search, color: Colors.white),
-                filled: true,
-                fillColor: Colors.white.withOpacity(0.2),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
-              ),
+              leading: const Icon(Icons.search, color: Colors.white),
             ),
           ),
 
@@ -73,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 3,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
-                            childAspectRatio: 0.88,
+                            childAspectRatio: 1,
                           ),
                       itemCount: cats.length,
                       itemBuilder: (ctx, i) => CategoryCard(category: cats[i]),

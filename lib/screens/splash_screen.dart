@@ -27,7 +27,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     // REPLACING PAGES: pushReplacementNamed removes this route from the stack
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 10), () {
       if (mounted) Navigator.pushReplacementNamed(context, '/home');
     });
   }
