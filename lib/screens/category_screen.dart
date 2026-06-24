@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/category_model.dart';
 import 'package:learn_flutter/models/item_model.dart';
 import 'package:learn_flutter/widgets/empty_state.dart';
+import 'package:learn_flutter/widgets/bottom_navigation.dart';
+import 'package:provider/provider.dart';
+import 'package:learn_flutter/providers/cart_provider.dart';
 
 class CategoryScreen extends StatefulWidget {
   // CONCEPT 5 – CONSTRUCTOR: optional direct-pass parameter
@@ -44,6 +47,64 @@ class _CategoryScreenState extends State<CategoryScreen> {
       appBar: AppBar(
         title: Text('${_cat.emoji}  ${_cat.name}'),
         backgroundColor: _cat.color,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_box_outlined),
+            tooltip: 'Add Item',
+            onPressed: () async {
+              final item = await Navigator.pushNamed(
+                context,
+                '/add-item',
+                arguments: _cat,
+              );
+              if (item is ItemModel) {
+                setState(() => _cat.items.add(item));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('${item.name} added to ${_cat.name}'),
+                      backgroundColor: _cat.color,
+                    ),
+                  );
+                }
+              }
+            },
+          ),
+          Consumer<CartProvider>(
+            builder: (context, cart, child) => 
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.shopping_cart),
+                  tooltip: 'Cart',
+                  onPressed: () => Navigator.pushNamed(context, '/cart'),
+                ),
+                if (cart.cartCount  > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints:
+                          const BoxConstraints(minWidth: 16, minHeight: 16),
+                      child: Text(
+                        cart.cartCount.toString(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 10),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+          
+        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,6 +168,30 @@ class _CategoryScreenState extends State<CategoryScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Item',
+        backgroundColor: _cat.color,
+        onPressed: () async {
+          final item = await Navigator.pushNamed(
+            context,
+            '/add-item',
+            arguments: _cat,
+          );
+          if (item is ItemModel) {
+            setState(() => _cat.items.add(item));
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${item.name} added to ${_cat.name}'),
+                  backgroundColor: _cat.color,
+                ),
+              );
+            }
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationTabs(currentTab: BottomTabs.shop),
     );
   }
 }
@@ -142,21 +227,37 @@ class _ItemTile extends StatelessWidget {
                 style: const TextStyle(
                     fontSize: 12, color: Colors.black54)),
             const SizedBox(height: 4),
-            Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-              decoration: BoxDecoration(
-                color: categoryColor.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                item.tag,
-                style: TextStyle(
-                  fontSize: 11,
-                  color: categoryColor,
-                  fontWeight: FontWeight.w600,
+            Row(
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: categoryColor.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    item.tag,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: categoryColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
+                Expanded(
+                  child: SizedBox(
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Provider.of<CartProvider>(context, listen: false)
+                            .addItem(item.id);
+                      },
+                      child: const Text('Add to Cart', style: TextStyle(fontSize: 11, color: Colors.white)),
+                    ),
               ),
+                ),
+              ],
             ),
           ],
         ),

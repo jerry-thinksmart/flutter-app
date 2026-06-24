@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/data.dart';
 import 'package:learn_flutter/models/item_model.dart';
+import 'package:learn_flutter/widgets/bottom_navigation.dart';
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -193,6 +194,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationTabs(currentTab: BottomTabs.order,),
     );
   }
 }

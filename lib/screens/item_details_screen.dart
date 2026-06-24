@@ -6,7 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/models/item_model.dart';
+import 'package:learn_flutter/providers/cart_provider.dart';
 import 'package:learn_flutter/widgets/tag.dart';
+import 'package:provider/provider.dart';
 
 class ItemDetailScreen extends StatelessWidget {
   const ItemDetailScreen({super.key});
@@ -90,6 +92,8 @@ class ItemDetailScreen extends StatelessWidget {
                       icon: const Icon(Icons.shopping_cart_outlined),
                       label: const Text('Add to Cart'),
                       onPressed: () {
+                        Provider.of<CartProvider>(context, listen: false)
+                            .addItem(item.id);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content:

@@ -3,6 +3,7 @@ import 'package:learn_flutter/models/category_model.dart';
 import 'package:learn_flutter/models/data.dart';
 import 'package:learn_flutter/widgets/category_card.dart';
 import 'package:learn_flutter/widgets/empty_state.dart';
+import '../widgets/bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,6 +35,22 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('ShopNav'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.add_business_outlined),
+            tooltip: 'Add Category',
+            onPressed: () async {
+              final category =
+                  await Navigator.pushNamed(context, '/add-category');
+              if (category is CategoryModel) {
+                setState(() => appCategories.add(category));
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${category.name} added')),
+                  );
+                }
+              }
+            },
+          ),
           // CONCEPT 4 – NAVIGATE TO NEW PAGE via Named Route
           IconButton(
             icon: const Icon(Icons.tune),
@@ -64,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: GridView.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
+                            crossAxisCount: 2,
                             crossAxisSpacing: 16,
                             mainAxisSpacing: 16,
                             childAspectRatio: 1,
@@ -76,6 +93,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Category',
+        onPressed: () async {
+          final category = await Navigator.pushNamed(context, '/add-category');
+          if (category is CategoryModel) {
+            setState(() => appCategories.add(category));
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${category.name} added')),
+              );
+            }
+          }
+        },
+        child: const Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationTabs(currentTab: BottomTabs.home),
     );
   }
 }
