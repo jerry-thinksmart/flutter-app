@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 class CartProvider with ChangeNotifier {
-  Map<String, int> _items = {
-    "electronics": 1,
-    "fashion": 1,
-    "home": 3,
-  };
+  Map<String, int> _items = {  };
 
   Map<String, int> get items => _items;
-  int get cartCount => _items.length;
+  int get cartCount => _items.values.fold(0, (sum, quantity) => sum + quantity);
 
-  void addItem(String productId) {
+  void  addItem(String productId) {
     if (_items.containsKey(productId)) {
       _items[productId] = _items[productId]! + 1;
     } else {

@@ -15,8 +15,8 @@ class BottomNavigationTabs extends StatelessWidget{
 
   static const routes = {
     BottomTabs.home: '/home',
-    BottomTabs.shop: '/category',
-    BottomTabs.cart: '/item-detail',
+    BottomTabs.shop: '/home',
+    BottomTabs.cart: '/cart',
     BottomTabs.order: '/filter',
     BottomTabs.settings: '/settings',
   };

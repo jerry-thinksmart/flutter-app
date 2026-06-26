@@ -252,6 +252,21 @@ class _ItemTile extends StatelessWidget {
                       onPressed: () {
                         Provider.of<CartProvider>(context, listen: false)
                             .addItem(item.id);
+                        SnackBar snackBar = SnackBar(
+                          content: Text('${item.name} added to cart'),
+                          duration: const Duration(seconds: 2),
+                          action: SnackBarAction(
+                            label: 'Undo',
+                            textColor: Colors.white,
+                            onPressed: () {
+                              Provider.of<CartProvider>(context, listen: false)
+                                  .removeItem(item.id);
+                            },
+                          ),
+                          backgroundColor: categoryColor,
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        
                       },
                       child: const Text('Add to Cart', style: TextStyle(fontSize: 11, color: Colors.white)),
                     ),

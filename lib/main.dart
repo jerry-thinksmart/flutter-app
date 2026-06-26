@@ -6,16 +6,17 @@ import 'package:learn_flutter/screens/filter_screen.dart';
 import 'package:learn_flutter/screens/home_screen.dart';
 import 'package:learn_flutter/screens/item_details_screen.dart';
 import 'package:learn_flutter/screens/splash_screen.dart';
+import 'package:learn_flutter/screens/cart_screen.dart';
 import 'package:learn_flutter/screens/setting_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:learn_flutter/providers/cart_provider.dart';
+import './providers/cart_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => CartProvider(),
-      child: const MyApp(),
-    ),
+  ChangeNotifierProvider(
+        create: (context) => CartProvider(),
+        child: const MyApp(),
+    )
   );
 }
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
          useMaterial3: true,
@@ -81,6 +83,7 @@ class MyApp extends StatelessWidget {
         '/':            (ctx) => const SplashScreen(),
         '/home':        (ctx) => const HomeScreen(),
         '/category':    (ctx) => const CategoryScreen(),
+        '/cart':        (ctx) => const CartScreen(),
         '/item-detail': (ctx) => const ItemDetailScreen(),
         '/add-category': (ctx) => const AddCategoryScreen(),
         '/add-item':    (ctx) => const AddItemScreen(),
