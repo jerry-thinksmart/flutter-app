@@ -28,6 +28,12 @@ class CartScreen extends StatelessWidget {
 
       appBar: AppBar(
         title: const Text('Cart'),
+        actions: [
+          Consumer<CartProvider>(builder: (context, value, child) =>  IconButton(onPressed: (){
+            value.clearCart();
+          }, icon: Icon(Icons.delete, color: Colors.red,)), )
+        ],
+
       ),
 
       body: cartItems.isEmpty
